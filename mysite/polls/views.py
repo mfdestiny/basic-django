@@ -1,7 +1,9 @@
+from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from .models import Choice, Question
 from django.urls import reverse
+from .models import Choice, Question
+
 
 # Create your views here.
 
@@ -32,6 +34,6 @@ def vote(request, question_id):
 			})
 	else:
 		# Choice selected , save and redirect to protect against double entry saves
-		selected_choice.votes += 1
+		selected_choice.votes = F('selected_choice') + 1
 		selected_choice.save()
 		return HttpResponseRedirect(reverse('polls:results', args=(question.id, )))
